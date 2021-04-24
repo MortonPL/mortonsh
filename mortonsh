@@ -1,0 +1,79 @@
+# Morton's Bash Pack
+# Latest Version: 0.1.1
+# Last Date: 24/04/21
+
+### Self-commands
+mortonsh() {
+  case "${1}" in
+  --help)
+    echo "Can't help you yet... Sorry!"
+	;;
+  -h)
+    echo "Can't help you yet... Sorry!"
+	;;
+  --version)
+    echo "Morton's Bash Pack, version 0.1.1"
+	;;
+  -v)
+    echo "Morton's Bash Pack, version 0.1.1"
+	;;
+  --edit)
+    vim ~/mortonsh
+    ;;
+  -e)
+    vim ~/mortonsh
+    ;;
+  --update)
+    wget https://raw.github.com/MortonPL/mortonsh/stable/mortonsh -O ~/mortonsh
+	;;
+  -u)
+    wget https://raw.github.com/MortonPL/mortonsh/stable/mortonsh -O ~/mortonsh
+	;;
+  *)
+    echo "mortonsh: usage: [OPTION]..."
+	echo "Try 'mortonsh --help' for more information."
+    ;;
+  esac
+}
+msh() {
+  mortonsh $@
+}
+### Common commands
+alias zz="cd .."
+alias ll="ls -al"
+alias xx="clear"
+alias home="cd ~"
+alias wipe="cd ~ && clear"
+
+### Files
+rn() {
+  cp "${1}" "${2}" && rm "${1}"
+}
+vish() {
+  vim "${1}" && chmod +x "${1}"
+}
+cphere() {
+  cp "${1}" $(basename "${1}")
+}
+mvhere() {
+  mv "${1}" $(basename "${1}")
+}
+swap() {
+  mv "${1}" $(dirname "${1}")/$(basename "${1}")
+  mv "${1}" $(dirname "${1}")/$(basename "${1}")
+}
+
+### Networks
+galeraget() {
+  scp "${1}"@galera.ii.pw.edu.pl:~/"${2}" $(basename "${2}")
+}
+galeraput() {
+  scp "${1}" "${2}"@galera.ii.pw.edu.pl:~/$(basename "${2}")
+}
+galera() {
+  ssh "${1}"@galera.ii.pw.edu.pl
+}
+
+### Other
+
+# EOF
