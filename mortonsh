@@ -1,6 +1,6 @@
 # Morton's Bash Pack
-# Latest Version: 0.1.1
-# Last Date: 24/04/21
+# Latest Version: 0.1.2
+# Last Edit: 19/05/21
 
 ### Self-commands
 mortonsh() {
@@ -12,10 +12,10 @@ mortonsh() {
     echo "Can't help you yet... Sorry!"
 	;;
   --version)
-    echo "Morton's Bash Pack, version 0.1.1"
+    echo "Morton's Bash Pack, version 0.1.2"
 	;;
   -v)
-    echo "Morton's Bash Pack, version 0.1.1"
+    echo "Morton's Bash Pack, version 0.1.2"
 	;;
   --edit)
     vim ~/mortonsh
@@ -47,7 +47,7 @@ alias wipe="cd ~ && clear"
 
 ### Files
 rn() {
-  cp "${1}" "${2}" && rm "${1}"
+  mv "${1}" "${2}"
 }
 vish() {
   vim "${1}" && chmod +x "${1}"
@@ -55,15 +55,21 @@ vish() {
 cphere() {
   cp "${1}" $(basename "${1}")
 }
+cpthere() {
+  cp "$(basename "${1}") ${1}"
+}
 mvhere() {
   mv "${1}" $(basename "${1}")
 }
+mvthere() {
+  mv "$(basename "${1}") ${1}"
+}
 swap() {
-  mv "${1}" $(dirname "${1}")/$(basename "${1}")
-  mv "${1}" $(dirname "${1}")/$(basename "${1}")
+  mv "${1}" $(dirname "${2}")/$(basename "${1}")
+  mv "${2}" $(dirname "${1}")/$(basename "${2}")
 }
 
-### Networks
+### WEiTI-exclusive
 galeraget() {
   scp "${1}"@galera.ii.pw.edu.pl:~/"${2}" $(basename "${2}")
 }
@@ -75,5 +81,8 @@ galera() {
 }
 
 ### Other
+xserver() {
+  DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2}'):0 &
+}
 
 # EOF
