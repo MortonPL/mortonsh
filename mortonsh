@@ -1,28 +1,50 @@
 # Morton's Bash Pack
-# Latest Version: 0.1.2
+# Latest Version: 0.1.3
 # Last Edit: 20/05/21
+
+version="0.1.3"
 
 ### Self-commands
 mortonsh() {
   case "${1}" in
-  --help)
-    echo "Can't help you yet... Sorry!"
-	;;
-  -h)
-    echo "Can't help you yet... Sorry!"
-	;;
-  --version)
-    echo "Morton's Bash Pack, version 0.1.2"
-	;;
-  -v)
-    echo "Morton's Bash Pack, version 0.1.2"
-	;;
   --edit)
     vim ~/mortonsh
     ;;
   -e)
     vim ~/mortonsh
     ;;
+  --help)
+    msh -v
+    echo "Can't help you yet... Sorry!"
+    echo "If you've just downloaded msh, use it with -i or --install to automatically add it to your .bashrc file."
+    echo "If you want to remove msh from your machine, use it with -r or --remove to undo the installation, then remove file 'mortonsh'."
+	;;
+  -h)
+    msh -v
+    echo "Can't help you yet... Sorry!"
+    echo "If you've just downloaded msh, use it with -i or --install to automatically add it to your .bashrc file."
+    echo "If you want to remove msh from your machine, use it with -r or --remove to undo the installation, then remove file 'mortonsh'."
+	;;
+  --install)
+    [ -z "${MORTONSH}" ] && echo -e "#MSHBEGIN\nexport MORTONSH=1\n[ -f ~/mortonsh ] && . ~/mortonsh\n#MSHEND" >> .bashrc
+    echo "Mortonsh written to .bashrc."
+	;;
+  -i)
+    [ -z "${MORTONSH}" ] && echo -e "#MSHBEGIN\nexport MORTONSH=1\n[ -f ~/mortonsh ] && . ~/mortonsh\n#MSHEND" >> .bashrc
+    echo "Mortonsh written to .bashrc."
+	;;
+  --remove)
+    ! [ -z "${MORTONSH}" ] && sed -i -e "/^#MSHBEGIN$/,/^#MSHEND$/d;/^#MSHEND$/d;/^#MSHBEGIN$/d" .bashrc && unset MORTONSH
+	;;
+  -r)
+    ! [ -z "${MORTONSH}" ] && sed -i -e "/^#MSHBEGIN$/,/^#MSHEND$/d;/^#MSHEND$/d;/^#MSHBEGIN$/d" .bashrc && unset MORTONSH
+	;;
+  --version)
+    echo "Morton's Bash Pack, version ${version}"
+	;;
+  -v)
+    echo "Morton's Bash Pack, version ${version}"
+	;;
   --update)
     cp mortonsh mortonsh.backup
     local branch="${2}"
@@ -36,8 +58,9 @@ mortonsh() {
     wget https://raw.github.com/MortonPL/mortonsh/$branch/mortonsh -O ~/mortonsh
 	;;
   *)
+    msh -v
     echo "mortonsh: usage: [OPTION]..."
-	echo "Try 'mortonsh --help' for more information."
+    echo "Try 'mortonsh --help' for more information."
     ;;
   esac
 }
@@ -45,11 +68,21 @@ msh() {
   mortonsh $@
 }
 ### Common commands
-alias zz="cd .."
-alias ll="ls -al"
-alias xx="clear"
-alias home="cd ~"
-alias wipe="cd ~ && clear"
+zz() {
+  cd ..
+}
+ll() {
+  ls -al
+}
+xx() {
+  clear
+}
+home() {
+  cd ~
+}
+wipe() {
+  cd ~ && clear
+}
 
 ### Files
 rn() {
@@ -90,5 +123,9 @@ galera() {
 xserver() {
   DISPLAY=$(cat /etc/resolv.conf | grep nameserver | awk '{print $2}'):0 &
 }
+
+### You can run it from the file, too
+[ $# -eq 0 ] && mortonsh -h
+$@
 
 # EOF
