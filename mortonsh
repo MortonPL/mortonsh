@@ -1,6 +1,6 @@
 # Morton's Bash Pack
 # Latest Version: 0.1.2
-# Last Edit: 19/05/21
+# Last Edit: 20/05/21
 
 ### Self-commands
 mortonsh() {
@@ -24,10 +24,16 @@ mortonsh() {
     vim ~/mortonsh
     ;;
   --update)
-    wget https://raw.github.com/MortonPL/mortonsh/stable/mortonsh -O ~/mortonsh
+    cp mortonsh mortonsh.backup
+    local branch="${2}"
+    [ -z "${2}" ] && branch="master"
+    wget https://raw.github.com/MortonPL/mortonsh/$branch/mortonsh -O ~/mortonsh
 	;;
   -u)
-    wget https://raw.github.com/MortonPL/mortonsh/stable/mortonsh -O ~/mortonsh
+    cp mortonsh mortonsh.backup
+    local branch="${2}"
+    [ -z "${2}" ] && branch="master"
+    wget https://raw.github.com/MortonPL/mortonsh/$branch/mortonsh -O ~/mortonsh
 	;;
   *)
     echo "mortonsh: usage: [OPTION]..."
