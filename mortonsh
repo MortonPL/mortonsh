@@ -18,106 +18,74 @@ mortonsh() {
     echo "Can't help you yet... Sorry!"
     echo "If you've just downloaded msh, use it with -i or --install to automatically add it to your .bashrc file."
     echo "If you want to remove msh from your machine, use it with -r or --remove to undo the installation, then remove file 'mortonsh'."
-	;;
+    ;;
   -h)
     msh -v
     echo "Can't help you yet... Sorry!"
     echo "If you've just downloaded msh, use it with -i or --install to automatically add it to your .bashrc file."
     echo "If you want to remove msh from your machine, use it with -r or --remove to undo the installation, then remove file 'mortonsh'."
-	;;
+    ;;
   --install)
-    [ -z "${MORTONSH}" ] && echo -e "#MSHBEGIN\nexport MORTONSH=1\n[ -f ~/mortonsh ] && . ~/mortonsh\n#MSHEND" >> .bashrc
+    [ -z "${MORTONSH}" ] && echo -e "#MSHBEGIN\nexport MORTONSH=1\n[ -f ~/mortonsh ] && . ~/mortonsh 0\n#MSHEND" >> .bashrc
     echo "Mortonsh written to .bashrc."
-	;;
+    ;;
   -i)
-    [ -z "${MORTONSH}" ] && echo -e "#MSHBEGIN\nexport MORTONSH=1\n[ -f ~/mortonsh ] && . ~/mortonsh\n#MSHEND" >> .bashrc
+    [ -z "${MORTONSH}" ] && echo -e "#MSHBEGIN\nexport MORTONSH=1\n[ -f ~/mortonsh ] && . ~/mortonsh 0\n#MSHEND" >> .bashrc
     echo "Mortonsh written to .bashrc."
-	;;
+    ;;
   --remove)
     ! [ -z "${MORTONSH}" ] && sed -i -e "/^#MSHBEGIN$/,/^#MSHEND$/d;/^#MSHEND$/d;/^#MSHBEGIN$/d" .bashrc && unset MORTONSH
-	;;
+    ;;
   -r)
     ! [ -z "${MORTONSH}" ] && sed -i -e "/^#MSHBEGIN$/,/^#MSHEND$/d;/^#MSHEND$/d;/^#MSHBEGIN$/d" .bashrc && unset MORTONSH
-	;;
+    ;;
   --version)
     echo "Morton's Bash Pack, version ${version}"
-	;;
+    ;;
   -v)
     echo "Morton's Bash Pack, version ${version}"
-	;;
+    ;;
   --update)
     cp mortonsh mortonsh.backup
     local branch="${2}"
     [ -z "${2}" ] && branch="master"
     wget https://raw.github.com/MortonPL/mortonsh/$branch/mortonsh -O ~/mortonsh
-	;;
+    ;;
   -u)
     cp mortonsh mortonsh.backup
     local branch="${2}"
     [ -z "${2}" ] && branch="master"
     wget https://raw.github.com/MortonPL/mortonsh/$branch/mortonsh -O ~/mortonsh
-	;;
+    ;;
   *)
-    msh -v
     echo "mortonsh: usage: [OPTION]..."
     echo "Try 'mortonsh --help' for more information."
     ;;
   esac
 }
-msh() {
-  mortonsh $@
-}
+msh() { mortonsh $@; }
 ### Common commands
-zz() {
-  cd ..
-}
-ll() {
-  ls -al
-}
-xx() {
-  clear
-}
-home() {
-  cd ~
-}
-wipe() {
-  cd ~ && clear
-}
+zz() { cd ..; }
+xx() { clear; }
+home() { cd ~; }
+wipe() { cd ~ && clear; }
 
 ### Files
-rn() {
-  mv "${1}" "${2}"
-}
-vish() {
-  vim "${1}" && chmod +x "${1}"
-}
-cphere() {
-  cp "${1}" $(basename "${1}")
-}
-cpthere() {
-  cp "$(basename "${1}") ${1}"
-}
-mvhere() {
-  mv "${1}" $(basename "${1}")
-}
-mvthere() {
-  mv "$(basename "${1}") ${1}"
-}
+rn() { mv "${1}" "${2}"; }
+vish() { vim "${1}" && chmod +x "${1}"; }
+cphere() { cp "${1}" $(basename "${1}"); }
+cpthere() { cp "$(basename "${1}") ${1}"; }
+mvhere() { mv "${1}" $(basename "${1}"); }
+mvthere() { mv "$(basename "${1}") ${1}"; }
 swap() {
-  mv "${1}" $(dirname "${2}")/$(basename "${1}")
-  mv "${2}" $(dirname "${1}")/$(basename "${2}")
+  mv "${1}" $(dirname "${2}")/$(basename "${1}"; )
+  mv "${2}" $(dirname "${1}")/$(basename "${2}"; )
 }
 
 ### WEiTI-exclusive
-galeraget() {
-  scp "${1}"@galera.ii.pw.edu.pl:~/"${2}" $(basename "${2}")
-}
-galeraput() {
-  scp "${1}" "${2}"@galera.ii.pw.edu.pl:~/$(basename "${2}")
-}
-galera() {
-  ssh "${1}"@galera.ii.pw.edu.pl
-}
+galera() { ssh "${1}"@galera.ii.pw.edu.pl; }
+galeraget() { scp "${1}"@galera.ii.pw.edu.pl:~/"${2}" $(basename "${2}"); }
+galeraput() { scp "${1}" "${2}"@galera.ii.pw.edu.pl:~/$(basename "${2}"); }
 
 ### Other
 xserver() {
@@ -125,7 +93,6 @@ xserver() {
 }
 
 ### You can run it from the file, too
-[ $# -eq 0 ] && mortonsh -h
-$@
+[ "${#}" -eq 0 ] && mortonsh -h || { [ "${1}" -ne 0 ] && "${@}" }
 
 # EOF
