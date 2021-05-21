@@ -58,7 +58,6 @@ mortonsh() {
     wget https://raw.github.com/MortonPL/mortonsh/$branch/mortonsh -O ~/mortonsh
     ;;
   *)
-    msh -v
     echo "mortonsh: usage: [OPTION]..."
     echo "Try 'mortonsh --help' for more information."
     ;;
