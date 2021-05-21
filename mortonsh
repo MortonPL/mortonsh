@@ -70,6 +70,9 @@ xx() { clear; }
 home() { cd ~; }
 wipe() { printf "\ec"; }
 
+### Numerical
+stoi() { echo $((10#$1)); }
+
 ### Files
 rn() { mv "${1}" "${2}"; }
 vish() { vim "${1}" && chmod +x "${1}"; }
@@ -80,6 +83,37 @@ mvthere() { mv "$(basename "${1}") ${1}"; }
 swap() {
   mv "${1}" $(dirname "${2}")/$(basename "${1}"; )
   mv "${2}" $(dirname "${1}")/$(basename "${2}"; )
+}
+next() {
+  local flaga=0
+  local flagb=0
+  local ext="${1##*.}";
+  local temp="${1%%$ext*}";
+  local num="${temp//[^0-9]/}";
+  local numval=$(stoi $num);
+  local oldval=$numval;
+  local name="${1%%$num*}";
+  local zeros=${#num};
+  shopt -s nullglob;
+  for file in $name*.$ext;
+  do
+    val="${file##$name}";
+    val="${val%%.$ext}";
+    temp="{1//[^0-9]/}";
+    if [[ $zeros -ne ${#val} || ${#temp} -le 0 ]]; then
+      continue
+    fi
+    val=$(stoi $val);
+    [[ $val -eq $numval ]] && flaga=1;
+    [[ $val -gt $numval ]] && numval=$val && flaga=0 && flagb=1;
+  done
+  if [[ $numval -eq $oldval && flaga -eq 0 ]]; then
+    numval=$((oldval))
+  fi
+  if [[ $flagb -eq 1 || $numval -eq $oldval && $flaga -eq 1 ]]; then
+    numval=$((numval+1))
+  fi
+  printf "%s%0${zeros}d.%s\n" $name $numval $ext;
 }
 
 ### WEiTI-exclusive
@@ -93,6 +127,6 @@ xserver() {
 }
 
 ### You can run it from the file, too
-[ "${#}" -eq 0 ] && mortonsh -h || { [ "${1}" -ne 0 ] && "${@}"; }
+{ [ "${#}" -eq 0 ] && mortonsh -h; } || { [ "${1}" != "0" ] && "${@}"; }
 
 # EOF
