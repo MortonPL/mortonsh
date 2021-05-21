@@ -68,7 +68,7 @@ msh() { mortonsh $@; }
 zz() { cd ..; }
 xx() { clear; }
 home() { cd ~; }
-wipe() { cd ~ && clear; }
+wipe() { printf "\ec"; }
 
 ### Files
 rn() { mv "${1}" "${2}"; }
