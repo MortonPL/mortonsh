@@ -93,6 +93,6 @@ xserver() {
 }
 
 ### You can run it from the file, too
-[ "${#}" -eq 0 ] && mortonsh -h || { [ "${1}" -ne 0 ] && "${@}" }
+[ "${#}" -eq 0 ] && mortonsh -h || { [ "${1}" -ne 0 ] && "${@}"; }
 
 # EOF
