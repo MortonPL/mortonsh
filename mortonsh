@@ -1,8 +1,8 @@
 # Morton's Bash Pack
-# Latest Version: 0.1.3
-# Last Edit: 20/05/21
+# Latest Version: 0.1.4
+# Last Edit: 12/10/21
 
-version="0.1.3"
+version="0.1.4"
 
 ### Self-commands
 mortonsh() {
@@ -16,7 +16,7 @@ mortonsh() {
   --help)
     msh -v
     echo "Can't help you yet... Sorry!"
-    echo "If you've just downloaded msh, use it with -i or --install to automatically add it to your .bashrc file."
+    echo "If you've just downloaded mortonsh, use './mortonsh msh --install' to automatically add it to your .bashrc file."
     echo "If you want to remove msh from your machine, use it with -r or --remove to undo the installation, then remove file 'mortonsh'."
     ;;
   -h)
@@ -26,18 +26,20 @@ mortonsh() {
     echo "If you want to remove msh from your machine, use it with -r or --remove to undo the installation, then remove file 'mortonsh'."
     ;;
   --install)
-    [ -z "${MORTONSH}" ] && echo -e "#MSHBEGIN\nexport MORTONSH=1\n[ -f ~/mortonsh ] && . ~/mortonsh 0\n#MSHEND" >> .bashrc
+    [ -z "${MORTONSH}" ] && echo -e "#MSHBEGIN\nexport MORTONSH=1\n[ -f ~/mortonsh ] && . ~/mortonsh 0\n#MSHEND" >> ~/.bashrc
+	cp mortonsh ~/mortonsh
     echo "Mortonsh written to .bashrc."
     ;;
   -i)
-    [ -z "${MORTONSH}" ] && echo -e "#MSHBEGIN\nexport MORTONSH=1\n[ -f ~/mortonsh ] && . ~/mortonsh 0\n#MSHEND" >> .bashrc
+    [ -z "${MORTONSH}" ] && echo -e "#MSHBEGIN\nexport MORTONSH=1\n[ -f ~/mortonsh ] && . ~/mortonsh 0\n#MSHEND" >> ~/.bashrc
+	cp mortonsh ~/mortonsh
     echo "Mortonsh written to .bashrc."
     ;;
   --remove)
-    ! [ -z "${MORTONSH}" ] && sed -i -e "/^#MSHBEGIN$/,/^#MSHEND$/d;/^#MSHEND$/d;/^#MSHBEGIN$/d" .bashrc && unset MORTONSH
+    ! [ -z "${MORTONSH}" ] && sed -i -e "/^#MSHBEGIN$/,/^#MSHEND$/d;/^#MSHEND$/d;/^#MSHBEGIN$/d" ~/.bashrc && unset MORTONSH
     ;;
   -r)
-    ! [ -z "${MORTONSH}" ] && sed -i -e "/^#MSHBEGIN$/,/^#MSHEND$/d;/^#MSHEND$/d;/^#MSHBEGIN$/d" .bashrc && unset MORTONSH
+    ! [ -z "${MORTONSH}" ] && sed -i -e "/^#MSHBEGIN$/,/^#MSHEND$/d;/^#MSHEND$/d;/^#MSHBEGIN$/d" ~/.bashrc && unset MORTONSH
     ;;
   --version)
     echo "Morton's Bash Pack, version ${version}"
@@ -63,7 +65,9 @@ mortonsh() {
     ;;
   esac
 }
+
 msh() { mortonsh $@; }
+
 ### Common commands
 zz() { cd ..; }
 xx() { clear; }
