@@ -1,8 +1,8 @@
 # Morton's Bash Pack
-# Latest Version: 0.1.4
-# Last Edit: 12/10/21
+# Latest Version: 0.1.5
+# Last Edit: 23/11/21
 
-version="0.1.4"
+version="0.1.5"
 
 ### Self-commands
 mortonsh() {
@@ -17,13 +17,14 @@ mortonsh() {
     msh -v
     echo "Can't help you yet... Sorry!"
     echo "If you've just downloaded mortonsh, use './mortonsh msh --install' to automatically add it to your .bashrc file."
-    echo "If you want to remove msh from your machine, use it with -r or --remove to undo the installation, then remove file 'mortonsh'."
+	echo "Don't want to install? You can run commands from the file using './mortonsh {COMMAND_NAME}', i.e. './mortonsh home'."
+    echo "If you want to remove msh from your machine, use it with -r or --remove to undo the installation and remove the file 'mortonsh'."
     ;;
   -h)
     msh -v
     echo "Can't help you yet... Sorry!"
     echo "If you've just downloaded msh, use it with -i or --install to automatically add it to your .bashrc file."
-    echo "If you want to remove msh from your machine, use it with -r or --remove to undo the installation, then remove file 'mortonsh'."
+    echo "If you want to remove msh from your machine, use it with -r or --remove to undo the installation and remove the file 'mortonsh'."
     ;;
   --install)
     [ -z "${MORTONSH}" ] && echo -e "#MSHBEGIN\nexport MORTONSH=1\n[ -f ~/mortonsh ] && . ~/mortonsh 0\n#MSHEND" >> ~/.bashrc
@@ -37,9 +38,11 @@ mortonsh() {
     ;;
   --remove)
     ! [ -z "${MORTONSH}" ] && sed -i -e "/^#MSHBEGIN$/,/^#MSHEND$/d;/^#MSHEND$/d;/^#MSHBEGIN$/d" ~/.bashrc && unset MORTONSH
+	rm ~/mortonsh
     ;;
   -r)
     ! [ -z "${MORTONSH}" ] && sed -i -e "/^#MSHBEGIN$/,/^#MSHEND$/d;/^#MSHEND$/d;/^#MSHBEGIN$/d" ~/.bashrc && unset MORTONSH
+	rm ~/mortonsh
     ;;
   --version)
     echo "Morton's Bash Pack, version ${version}"
@@ -48,13 +51,13 @@ mortonsh() {
     echo "Morton's Bash Pack, version ${version}"
     ;;
   --update)
-    cp mortonsh mortonsh.backup
+    cp ~/mortonsh ~/mortonsh.backup
     local branch="${2}"
     [ -z "${2}" ] && branch="master"
     wget https://raw.github.com/MortonPL/mortonsh/$branch/mortonsh -O ~/mortonsh
     ;;
   -u)
-    cp mortonsh mortonsh.backup
+    cp ~/mortonsh ~/mortonsh.backup
     local branch="${2}"
     [ -z "${2}" ] && branch="master"
     wget https://raw.github.com/MortonPL/mortonsh/$branch/mortonsh -O ~/mortonsh
@@ -78,16 +81,18 @@ wipe() { printf "\ec"; }
 stoi() { echo $((10#$1)); }
 
 ### Files
-rn() { mv "${1}" "${2}"; }
 vish() { vim "${1}" && chmod +x "${1}"; }
 cphere() { cp "${1}" $(basename "${1}"); }
 cpthere() { cp "$(basename "${1}") ${1}"; }
 mvhere() { mv "${1}" $(basename "${1}"); }
 mvthere() { mv "$(basename "${1}") ${1}"; }
 swap() {
-  mv "${1}" $(dirname "${2}")/$(basename "${1}"; )
+  cp "${1}" $(dirname "${2}")/$(basename "${1}"; )
   mv "${2}" $(dirname "${1}")/$(basename "${2}"; )
+  rm "${1}"
 }
+
+#### spaghetti bs, slated for removal
 next() {
   local flaga=0
   local flagb=0
@@ -120,10 +125,20 @@ next() {
   printf "%s%0${zeros}d.%s\n" $name $numval $ext;
 }
 
+#### wip
+next2() {
+  local start=0;
+  ! [ -z "${NEWSEQ}" ] && export NEWSEQ=$start;
+  [[ ${#} -ne 0 ]] && [[ ${1} -gt 0 ]] && start=${1} && NEWSEQ=$start;
+  start=$NEWSEQ;
+  printf "%d" $start;
+  NEWSEQ={$start+1};
+}
+
 ### WEiTI-exclusive
 galera() { ssh "${1}"@galera.ii.pw.edu.pl; }
 galeraget() { scp "${1}"@galera.ii.pw.edu.pl:~/"${2}" $(basename "${2}"); }
-galeraput() { scp "${1}" "${2}"@galera.ii.pw.edu.pl:~/$(basename "${2}"); }
+galeraput() { scp "${2}" "${1}"@galera.ii.pw.edu.pl:~/$(basename "${2}"); }
 
 ### Other
 xserver() {
